@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
 </head>
+
 <body>
 
 
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
     </div>
+  </div>
 
 
   <style>
@@ -43,17 +45,18 @@
       position: relative;
       padding: 2rem;
       box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
+        0 0 0 4px rgba(0, 0, 0, 0.1),
         inset 0 0 0 3px #EFEFEF,
         inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
+        0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .clock-face {
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px);
+      /* account for the height of the clock hands */
     }
 
     .hand {
@@ -62,13 +65,58 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.07s;
+      transition-timing-function: cubic-bezier(0.42, 0, 0, 2.1);
     }
 
+    .hour-hand {
+      width: 30%;
+      left: 20%;
+      height: 12px;
+    }
+
+    .second-hand {
+      height: 2px;
+    }
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    function setDate(s, m, h) {
+      const now = new Date();
+      const secondsDegree = now.getSeconds() / 60 * 360 + 90;
+      const minutesDegree = now.getMinutes() / 60 * 360 + 90;
+      const hoursDegree = now.getHours() / 12 * 360 + 90;
+
+      s.style.transform = `rotate(${secondsDegree}deg)`
+      m.style.transform = `rotate(${minutesDegree}deg)`
+      h.style.transform = `rotate(${hoursDegree}deg)`
+
+      if (secondsDegree === 90) {
+        secondHand.style.transition = 'none';
+      } else {
+        secondHand.style.transition = '';
+      }
+      if (minutesDegree === 90) {
+        minuteHand.style.transition = 'none';
+      } else {
+        minuteHand.style.transition = '';
+      }
+      if (hoursDegree === 90) {
+        hourHand.style.transition = 'none';
+      } else {
+        hourHand.style.transition = '';
+      }
+    }
+
+    setInterval(() => { return setDate(secondHand, minuteHand, hourHand); }, 1000);
 
   </script>
 </body>
+
 </html>
